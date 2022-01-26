@@ -8,10 +8,10 @@ import { CpuUsageService } from 'src/app/services/cpu-usage.service';
   styleUrls: ['./cpu-usage.component.scss']
 })
 export class CpuUsageComponent {
-  public cpuUsage: Observable<string | number>;
+  public cpuUsage: Observable<number>;
 
-  constructor(private dateService:CpuUsageService) {
-    this.cpuUsage = this.dateService.getCpuUsage();
+  constructor(private cpuUsageService:CpuUsageService) {
+    this.cpuUsage = this.cpuUsageService.getCpuUsage();
    }
 
 }

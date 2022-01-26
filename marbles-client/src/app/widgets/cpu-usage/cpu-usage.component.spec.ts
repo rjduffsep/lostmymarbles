@@ -36,4 +36,14 @@ describe('CpuUsageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render usage of 0 initially', () => {    
+    component.cpuUsage.subscribe((cpuUsage) => expect(cpuUsage).toEqual(0));
+  });
+
+  it('should render current usage', () => {
+    const newCpuUsage = 1.23;
+    mockCpuUsageReturn.next(newCpuUsage);
+    component.cpuUsage.subscribe((cpuUsage) => expect(cpuUsage).toEqual(newCpuUsage));
+  });
 });

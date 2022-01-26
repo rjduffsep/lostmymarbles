@@ -1,26 +1,25 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { EndpointsService } from './endpoints.service';
 
+export const CPU_USAGE_HEARTBEAT_MS = 1000;
 type CpuUsageJson = { cpu: number };
-const timeout = 1000;
 
 @Injectable({
   providedIn: 'root'
 })
 export class CpuUsageService {
-  private cpuUsage: BehaviorSubject<string | number>;
+  private cpuUsage: BehaviorSubject<number>;
 
   constructor(private endpoints:EndpointsService) {
-    this.cpuUsage = new BehaviorSubject<string | number>(0);
+    this.cpuUsage = new BehaviorSubject<number>(0);
 
     setInterval(
       () => this.endpoints.getHttp('http://localhost:3001/cpu', (json: CpuUsageJson) => json.cpu).subscribe((c: number) => this.cpuUsage.next(c))
-    , timeout);
+    , CPU_USAGE_HEARTBEAT_MS);
   }
 
-  getCpuUsage(): Observable<string | number> {
+  getCpuUsage(): Observable<number> {
     return this.cpuUsage.asObservable();
   }
 }

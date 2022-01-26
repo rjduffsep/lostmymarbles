@@ -8,7 +8,7 @@ import { DateService } from 'src/app/services/date.service';
   styleUrls: ['./date.component.scss']
 })
 export class DateComponent {
-  public now: Observable<string | number>;
+  public now: Observable<number>;
 
   constructor(private dateService:DateService) {
     this.now = this.dateService.getNow();

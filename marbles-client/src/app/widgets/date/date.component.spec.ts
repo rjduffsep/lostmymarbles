@@ -35,4 +35,14 @@ describe('DateComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render date of 0 initially', () => {    
+    component.now.subscribe((date) => expect(date).toEqual(0));
+  });
+
+  it('should render current date', () => {
+    const newDate = 123;
+    mockDateReturn.next(newDate);
+    component.now.subscribe((date) => expect(date).toEqual(newDate));
+  });
 });

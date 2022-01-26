@@ -1,7 +1,7 @@
-import { fakeAsync, flush, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { DateService, timeout } from './date.service';
+import { DateService, DATE_HEARTBEAT_MS } from './date.service';
 import { EndpointsService } from './endpoints.service';
 
 describe('DateService', () => {
@@ -16,7 +16,7 @@ describe('DateService', () => {
     }) as EndpointsService;
     jasmine.clock().install();
     TestBed.configureTestingModule({providers: [
-      {provide: EndpointsService, useValue: mockEndpoint}
+      { provide: EndpointsService, useValue: mockEndpoint }
     ]});
     service = TestBed.inject(DateService);
   });
@@ -41,7 +41,7 @@ describe('DateService', () => {
   it('should return current value of date', done => {
     const expected = 111;
     mockGetReturn.next(expected);
-    jasmine.clock().tick(timeout + 1);
+    jasmine.clock().tick(DATE_HEARTBEAT_MS + 1);
     expect(mockEndpoint.getHttp).toHaveBeenCalled();
     
     service.getNow().subscribe((now) => {
