@@ -21,6 +21,6 @@ export class CpuUsageService {
   }
 
   getCpuUsage(): Observable<string | number> {
-    return this.cpuUsage;
+    return this.cpuUsage.asObservable();
   }
 }

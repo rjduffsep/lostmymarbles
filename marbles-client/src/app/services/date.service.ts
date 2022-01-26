@@ -21,6 +21,6 @@ export class DateService {
   }
 
   getNow(): Observable<number> {
-    return this.now;
+    return this.now.asObservable();
   }
 }
