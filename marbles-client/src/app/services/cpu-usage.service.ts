@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, concatMap, interval, map, Observable, Subject, switchMap, switchMapTo, tap } from 'rxjs';
 import { EndpointsService } from './endpoints.service';
 
 export const CPU_USAGE_HEARTBEAT_MS = 1000;
@@ -9,14 +9,14 @@ type CpuUsageJson = { cpu: number };
   providedIn: 'root'
 })
 export class CpuUsageService {
-  private cpuUsage: BehaviorSubject<number>;
+  private cpuUsage: Subject<number>;
 
   constructor(private endpoints:EndpointsService) {
-    this.cpuUsage = new BehaviorSubject<number>(0);
+    this.cpuUsage = new Subject<number>();
 
-    setInterval(
-      () => this.endpoints.getHttp('http://localhost:3001/cpu', (json: CpuUsageJson) => json.cpu).subscribe((c: number) => this.cpuUsage.next(c))
-    , CPU_USAGE_HEARTBEAT_MS);
+    interval(CPU_USAGE_HEARTBEAT_MS).pipe(
+      concatMap(() => this.endpoints.getHttp('http://localhost:3001/cpu', (json: CpuUsageJson) => json.cpu))
+    ).subscribe(this.cpuUsage);
   }
 
   getCpuUsage(): Observable<number> {
